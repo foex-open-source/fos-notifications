@@ -1,0 +1,53 @@
+{
+    "name":"FOS - Notifications"
+   ,"version":"20.1.0"
+   ,"description":"\u003Cp\u003EThe FOS Notification dynamic action plug-in is the perfect solution for showing notification messages in your application(s). It allows you to perform distinct colour notifications according to the message type e.g. success, warning, error, info. You can derive the message using static text with substitution support or from a Javascript expression or function. You can use HTML in the message or escape HTML for tighter security.\u0026nbsp;\u003C\/p\u003E\u003Cp\u003EThis plugin is based on the Toastr opensource library: https:\/\/codeseven.github.io\/toastr\/\u003C\/p\u003E"
+   ,"keywords":[
+        "notification"
+       ,"dynamic action"
+       ,"alert"
+       ,"position"
+       ,"toastr"
+       ,"multiple"
+    ]
+   ,"license":"MIT"
+   ,"commercial":"Yes"
+   ,"homepage":"https:\/\/foex.at\/fos"
+   ,"bugs":{
+        "url":"https:\/\/github.com\/foex-open-source\/fos-notifications\/issues"
+       ,"email":"support@fos.world"
+    }
+   ,"author":{
+        "name":"FOEX GmbH"
+       ,"email":"office@fos.world"
+       ,"url":"https:\/\/fos.world\/"
+       ,"twitter":"@foexopensource"
+    }
+   ,"repository":{
+        "type":"git"
+       ,"url":"https:\/\/github.com\/foex-open-source\/fos-notifications.git"
+    }
+   ,"oracle":{
+        "versions":[
+            "11.2.0.4"
+           ,"12.1.0.1"
+           ,"12.2.0.1"
+           ,"18.0.0.0"
+           ,"19.0.0.0"
+        ]
+       ,"apex":{
+            "versions":[
+                "19.2.0"
+               ,"20.1.0"
+            ]
+           ,"plugin":{
+                "internalName":"COM.FOS.NOTIFICATIONS"
+               ,"type":"dynamic action"
+               ,"demo":"https:\/\/fos.world\/ords\/f?p=1000:1050"
+               ,"previewImage":"https:\/\/fos.world\/ords\/fos_master_ws\/fos-image\/COM.FOS.NOTIFICATIONS"
+            }
+        }
+    }
+}
+
+
