@@ -1,7 +1,9 @@
+
+
 {
     "name":"FOS - Notifications"
    ,"version":"20.1.0"
-   ,"description":"\u003Cp\u003EThe FOS Notification dynamic action plug-in is the perfect solution for showing notification messages in your application(s). It allows you to perform distinct colour notifications according to the message type e.g. success, warning, error, info. You can derive the message using static text with substitution support or from a Javascript expression or function. You can use HTML in the message or escape HTML for tighter security.\u0026nbsp;\u003C\/p\u003E\u003Cp\u003EThis plugin is based on the Toastr opensource library: https:\/\/codeseven.github.io\/toastr\/\u003C\/p\u003E"
+   ,"description":"Highly configurable success, info, warning and error notifications, featuring an autodismiss timer, custom icons, various positions and more.\r\n\u003Ch4\u003EFree Plug-in under MIT License\u003C\/h4\u003E\r\n\u003Cp\u003E\r\nAll FOS plug-ins are released under MIT License, which essentially means it is free for everyone to use, no matter if commercial or private use. \r\n\u003C\/p\u003E\r\n\u003Ch4\u003EOverview\u003C\/h4\u003E\r\n\u003Cp\u003E\n    The \u003Cstrong\u003EFOS - Notifications\u003C\/strong\u003E dynamic action plug-in is built on top of a custom Javascript library and allows you to show success and error messages, as well as additional info and warning message types. It matches the look of native APEX success\/error messages, and can be styled to your liking through Themeroller.\n\u003C\/p\u003E\n\u003Cp\u003E\n    With the \"FOS - Notifications\" dynamic action you can show multiple messages of each type, customize them by setting their icon, position, how they are dismissed, and more.\n\u003C\/p\u003E\n\u003Cp\u003E\n    You can derive the message using static text with substitution support or from a Javascript expression or function. You can use HTML in the message or escape HTML for tighter security.\n\u003C\/p\u003E"
    ,"keywords":[
         "notification"
        ,"dynamic action"
@@ -9,10 +11,12 @@
        ,"position"
        ,"toastr"
        ,"multiple"
+       ,"fostr"
+       ,"icon"
     ]
    ,"license":"MIT"
    ,"commercial":"Yes"
-   ,"homepage":"https:\/\/foex.at\/fos"
+   ,"homepage":"https:\/\/foex.at\/fos\/"
    ,"bugs":{
         "url":"https:\/\/github.com\/foex-open-source\/fos-notifications\/issues"
        ,"email":"support@fos.world"
@@ -29,8 +33,7 @@
     }
    ,"oracle":{
         "versions":[
-            "11.2.0.4"
-           ,"12.1.0.1"
+            "12.1.0.1"
            ,"12.2.0.1"
            ,"18.0.0.0"
            ,"19.0.0.0"
@@ -43,11 +46,13 @@
            ,"plugin":{
                 "internalName":"COM.FOS.NOTIFICATIONS"
                ,"type":"dynamic action"
-               ,"demo":"https:\/\/fos.world\/ords\/f?p=1000:1050"
+               ,"demo":"https:\/\/fos.world\/ords\/f?p=10000:1050"
                ,"previewImage":"https:\/\/fos.world\/ords\/fos_master_ws\/fos-image\/COM.FOS.NOTIFICATIONS"
             }
         }
     }
 }
+
+
 
 
