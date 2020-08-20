@@ -17,7 +17,7 @@
    ,"license":"MIT"
    ,"commercial":"No"
    ,"commercially_supported":"Yes"
-   ,"homepage":"https:\/\/foex.at\/fos\/"
+   ,"homepage":"https:\/\/github.com\/foex-open-source\/fos-notifications"
    ,"bugs":{
         "url":"https:\/\/github.com\/foex-open-source\/fos-notifications\/issues"
        ,"email":"support@fos.world"
@@ -25,7 +25,7 @@
    ,"author":{
         "name":"FOEX GmbH"
        ,"email":"office@fos.world"
-       ,"url":"https:\/\/fos.world\/"
+       ,"url":"https:\/\/foex.at\/fos\/"
        ,"twitter":"@foexopensource"
     }
    ,"repository":{
