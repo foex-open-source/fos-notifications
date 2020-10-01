@@ -99,7 +99,6 @@ begin
         apex_json.write('substituteValues' , l_client_substitutions);
         -- notification settings
         apex_json.open_object('options');
-        apex_json.write('debug'            , v('DEBUG') != 'NO');
         apex_json.write('position'         , l_position);
         apex_json.write('autoDismiss'      , l_auto_dismiss);
         apex_json.write('clearAll'         , l_clear_all);
@@ -182,7 +181,7 @@ begin
 
     apex_json.close_object;
 
-    l_result.javascript_function := 'function(){FOS.util.notification(this, ' || apex_json.get_clob_output || ', '|| l_init_js_fn || ');}';
+    l_result.javascript_function := 'function(){FOS.utils.notification(this, ' || apex_json.get_clob_output || ', '|| l_init_js_fn || ');}';
 
     apex_json.free_output;
 

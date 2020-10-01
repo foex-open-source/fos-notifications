@@ -3,9 +3,9 @@
 /* globals apex,fostr,$ */
 
 var FOS = window.FOS || {};
-FOS.util =FOS.util || {};
+FOS.utils = FOS.utils || {};
 
-FOS.util.isRTL = FOS.util.isRTL || function () { return $('body').attr('dir') === "rtl"; };
+FOS.utils.isRTL = FOS.utils.isRTL || function () { return $('body').attr('dir') === "rtl"; };
 
 /**
  * A dynamic action to easily create notification messages in APEX. It is based on the Toastr open source jQuery plugin
@@ -15,7 +15,7 @@ FOS.util.isRTL = FOS.util.isRTL || function () { return $('body').attr('dir') ==
  * @param {string}   config.type    The notification type e.g. success, error, warning, info
  * @param {function} [initFn]       JS initialization function which will allow you to override settings right before the notificaton is sent
  */
-FOS.util.notification = function (daContext, config, initFn) {
+FOS.utils.notification = function (daContext, config, initFn) {
     var message, title, defaults, positionClass;
 
     // parameter checks

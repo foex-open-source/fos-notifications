@@ -290,7 +290,7 @@ window.fostr = (function() {
         warning: warning,
         error: error,
         clearAll: clearAll,
-        version: '20.1.0'
+        version: '20.1.1'
     };
 
 })();
