@@ -1,5 +1,3 @@
-
-
 create or replace package body com_fos_notifications
 as
 
@@ -31,33 +29,40 @@ as
     l_default_warning_icon   p_dynamic_action.attribute_01%type := nvl(p_plugin.attribute_04, 'fa-exclamation-triangle');
     l_default_error_icon     p_dynamic_action.attribute_01%type := nvl(p_plugin.attribute_05, 'fa-times-circle');
     l_default_options        p_dynamic_action.attribute_01%type := nvl(p_plugin.attribute_06, 'escape-html:newest-on-top:client-side-substitutions:dismiss-on-click:dismiss-on-button');
+    l_errors_as_warnings     boolean                            := instr(p_plugin.attribute_06, 'errors-as-warnings') > 0;
     l_default_dismiss_after  pls_integer                        := p_plugin.attribute_07;
 
     -- general attributes
-    l_notification_type     p_dynamic_action.attribute_01%type := p_dynamic_action.attribute_01;
+    l_action                p_dynamic_action.attribute_01%type := p_dynamic_action.attribute_01;
     l_message_type          p_dynamic_action.attribute_02%type := p_dynamic_action.attribute_02;
     l_static_title          p_dynamic_action.attribute_03%type := p_dynamic_action.attribute_03;
     l_static_message        p_dynamic_action.attribute_04%type := p_dynamic_action.attribute_04;
     l_js_title_code         p_dynamic_action.attribute_05%type := p_dynamic_action.attribute_05;
     l_js_message_code       p_dynamic_action.attribute_06%type := p_dynamic_action.attribute_06;
     l_override_defaults     boolean                            := nvl(p_dynamic_action.attribute_09,'N') = 'Y';
-    l_options               p_dynamic_action.attribute_07%type := case when l_override_defaults then p_dynamic_action.attribute_07 else l_default_options end;
+
+    l_options               apex_t_varchar2 := apex_string.split(case when l_override_defaults then p_dynamic_action.attribute_07 else l_default_options end, ':');
 
     -- options
-    l_escape                boolean                            := instr(l_options,'escape-html') > 0;
-    l_auto_dismiss          boolean                            := instr(l_options,'autodismiss') > 0;
-    l_client_substitutions  boolean                            := instr(l_options,'client-side-substitutions') > 0;
-    l_clear_all             boolean                            := instr(l_options,'remove-notifications') > 0;
-    l_show_dismiss_button   boolean                            := instr(l_options,'dismiss-on-button') > 0;
-    l_dismiss_on_click      boolean                            := instr(l_options,'dismiss-on-click') > 0;
-    l_newest_on_top         boolean                            := instr(l_options,'newest-on-top') > 0;
-    l_prevent_duplicates    boolean                            := instr(l_options,'prevent-duplicates') > 0;
-    l_inline_item_error     boolean                            := p_dynamic_action.attribute_12 is not null;
+    l_auto_dismiss          boolean  := 'autodismiss'               member of l_options;
+    l_escape                boolean  := 'escape-html'               member of l_options;
+    l_auto_dismiss_success  boolean  := 'autodismiss-success'       member of l_options;
+    l_auto_dismiss_warning  boolean  := 'autodismiss-warning'       member of l_options;
+    l_auto_dismiss_error    boolean  := 'autodismiss-error'         member of l_options;
+    l_auto_dismiss_info     boolean  := 'autodismiss-info'          member of l_options;
+    l_client_substitutions  boolean  := 'client-side-substitutions' member of l_options;
+    l_clear_all             boolean  := 'remove-notifications'      member of l_options;
+    l_show_dismiss_button   boolean  := 'dismiss-on-button'         member of l_options;
+    l_dismiss_on_click      boolean  := 'dismiss-on-click'          member of l_options;
+    l_newest_on_top         boolean  := 'newest-on-top'             member of l_options;
+    l_prevent_duplicates    boolean  := 'prevent-duplicates'        member of l_options;
+    l_inline_item_error     boolean  := p_dynamic_action.attribute_12 is not null;
     l_position              p_dynamic_action.attribute_08%type := case when l_override_defaults then p_dynamic_action.attribute_08 else l_default_position end;
     l_icon_override         p_dynamic_action.attribute_10%type := case when l_override_defaults then p_dynamic_action.attribute_10 else null end;
     l_icon                  p_dynamic_action.attribute_10%type;
     l_auto_dismiss_after    pls_integer                        := case when l_override_defaults then p_dynamic_action.attribute_11 else l_default_dismiss_after end;
     l_page_items            p_dynamic_action.attribute_12%type := p_dynamic_action.attribute_12;
+    l_replace_errors_with   p_dynamic_action.attribute_13%type := nvl(p_dynamic_action.attribute_13, 'warning'); -- only used in case of Convert Native APEX Notifications
 
     -- Javascript Initialization Code
     l_init_js_fn            varchar2(32767)                    := nvl(apex_plugin_util.replace_substitutions(p_dynamic_action.init_javascript_code), 'undefined');
@@ -87,14 +92,26 @@ begin
       , p_key            => 'fostr'
       );
 
+    -- if we haven't overridden the defaults then what is the component setting
+    if not l_override_defaults then
+        l_auto_dismiss :=
+            case l_action
+              when 'success' then l_auto_dismiss_success
+              when 'warning' then l_auto_dismiss_warning
+              when 'error'   then l_auto_dismiss_error
+              when 'info'    then l_auto_dismiss_info
+              else false
+            end;
+    end if;
+
     -- define our JSON config
     apex_json.initialize_clob_output;
     apex_json.open_object;
 
     -- notification plugin settings
-    apex_json.write('type'             , l_notification_type);
+    apex_json.write('type'             , l_action);
 
-    if l_notification_type != 'clear-all'
+    if l_action != 'clear-all'
     then
         apex_json.write('substituteValues' , l_client_substitutions);
         -- notification settings
@@ -124,7 +141,7 @@ begin
             l_icon := l_icon_override;
         else
             l_icon :=
-                case l_notification_type
+                case l_action
                     when 'success' then
                         l_default_success_icon
                     when 'info' then
@@ -138,44 +155,49 @@ begin
         end if;
 
         apex_json.write('iconClass'        , l_icon);
+        apex_json.write('replaceErrorsWith', l_replace_errors_with);
         apex_json.close_object;
 
-        -- additional error information for page items
-        apex_json.write('inlineItemErrors' , l_inline_item_error);
-
-        if l_inline_item_error
+        if l_action in ('success', 'info', 'warning', 'error')
         then
-            apex_json.write('inlinePageItems', trim(both ',' from trim(l_page_items)));
-        end if;
 
-        -- notification message
-        if l_message_type =  'static'
-        then
-            apex_json.write('title'        , case when l_client_substitutions then l_static_title   else apex_plugin_util.replace_substitutions(l_static_title)   end);
-            apex_json.write('message'      , case when l_client_substitutions then l_static_message else apex_plugin_util.replace_substitutions(l_static_message) end);
-        else
-            if l_js_title_code is not null
+            -- additional error information for page items
+            apex_json.write('inlineItemErrors' , l_inline_item_error);
+
+            if l_inline_item_error
             then
+                apex_json.write('inlinePageItems', trim(both ',' from trim(l_page_items)));
+            end if;
+
+            -- notification message
+            if l_message_type =  'static'
+            then
+                apex_json.write('title'        , case when l_client_substitutions then l_static_title   else apex_plugin_util.replace_substitutions(l_static_title)   end);
+                apex_json.write('message'      , case when l_client_substitutions then l_static_message else apex_plugin_util.replace_substitutions(l_static_message) end);
+            else
+                if l_js_title_code is not null
+                then
+                    apex_json.write_raw
+                      ( p_name  => 'title'
+                      , p_value => case l_message_type
+                           when 'javascript-expression' then
+                              'function(){return (' || l_js_title_code || ');}'
+                           when 'javascript-function-body' then
+                               l_js_title_code
+                           end
+                      );
+                end if;
+
                 apex_json.write_raw
-                  ( p_name  => 'title'
+                  ( p_name  => 'message'
                   , p_value => case l_message_type
                        when 'javascript-expression' then
-                          'function(){return (' || l_js_title_code || ');}'
+                          'function(){return (' || l_js_message_code || ');}'
                        when 'javascript-function-body' then
-                           l_js_title_code
+                           l_js_message_code
                        end
                   );
             end if;
-
-            apex_json.write_raw
-              ( p_name  => 'message'
-              , p_value => case l_message_type
-                   when 'javascript-expression' then
-                      'function(){return (' || l_js_message_code || ');}'
-                   when 'javascript-function-body' then
-                       l_js_message_code
-                   end
-              );
         end if;
     end if;
 
@@ -190,7 +212,5 @@ end render;
 
 end;
 /
-
-
 
 

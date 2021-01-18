@@ -1,11 +1,17 @@
-
-
 /*
 
 	Notes
 		* absolute left and right values should now be places on the container element, not the individual notifications
 
 */
+/**
+ * Fixes link styling in errors
+ */
+.fos-Alert--page.fos-Alert--warning a,
+.fos-Alert--page.fos-Alert--danger a {
+  color: inherit;
+  text-decoration: underline;
+}
 /**
  * Colorized Background
  */
@@ -459,7 +465,5 @@ html.u-RTL .fostr-progress {
     right: 1.6rem;
   }
 }
-
-
 
 
