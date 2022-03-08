@@ -1,6 +1,6 @@
 {
     "name":"FOS - Notifications"
-   ,"version":"21.1.0"
+   ,"version":"21.2.0"
    ,"description":"Highly configurable success, info, warning and error notifications, featuring an autodismiss timer, custom icons, various positions and more.\r\n\u003Ch4\u003EFree Plug-in under MIT License\u003C\/h4\u003E\r\n\u003Cp\u003E\r\nAll FOS plug-ins are released under MIT License, which essentially means it is free for everyone to use, no matter if commercial or private use. \r\n\u003C\/p\u003E\r\n\u003Ch4\u003EOverview\u003C\/h4\u003E\r\n\u003Cp\u003E\r\n    The \u003Cstrong\u003EFOS - Notifications\u003C\/strong\u003E dynamic action plug-in is built on top of a custom Javascript library and allows you to show success and error messages, as well as additional info and warning message types. It matches the look of native APEX success\/error messages, and can be styled to your liking through Themeroller.\r\n\u003C\/p\u003E\r\n\u003Cp\u003E\r\n    Using this dynamic action you can show multiple messages of each type, customize them by setting their icon, position, how they are dismissed, and more.\r\n\u003C\/p\u003E\r\n\u003Cp\u003E\r\n    You can derive the message using static text with substitution support or from a Javascript expression or function. You can use HTML in the message or escape HTML for tighter security. You can see a wide range of examples below:\r\n\u003C\/p\u003E"
    ,"keywords":[
         "notification"
@@ -36,12 +36,15 @@
            ,"12.2.0.1"
            ,"18.0.0.0"
            ,"19.0.0.0"
+           ,"21.0.0.0"
         ]
        ,"apex":{
             "versions":[
                 "19.2.0"
                ,"20.1.0"
                ,"20.2.0"
+               ,"21.1.0"
+               ,"21.2.0"
             ]
            ,"plugin":{
                 "internalName":"COM.FOS.NOTIFICATIONS"
