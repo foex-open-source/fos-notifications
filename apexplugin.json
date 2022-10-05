@@ -45,6 +45,7 @@
                ,"20.2.0"
                ,"21.1.0"
                ,"21.2.0"
+               ,"22.1.0"
             ]
            ,"plugin":{
                 "internalName":"COM.FOS.NOTIFICATIONS"
