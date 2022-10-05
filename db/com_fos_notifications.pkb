@@ -30,7 +30,7 @@ as
     l_default_error_icon     p_dynamic_action.attribute_01%type := nvl(p_plugin.attribute_05, 'fa-times-circle');
     l_default_options        p_dynamic_action.attribute_01%type := nvl(p_plugin.attribute_06, 'escape-html:newest-on-top:client-side-substitutions:dismiss-on-click:dismiss-on-button');
     l_errors_as_warnings     boolean                            := instr(p_plugin.attribute_06, 'errors-as-warnings') > 0;
-    l_default_dismiss_after  pls_integer                        := p_plugin.attribute_07;
+    l_default_dismiss_after  pls_integer                        := apex_plugin_util.replace_substitutions(p_plugin.attribute_07);
 
     -- general attributes
     l_action                p_dynamic_action.attribute_01%type := p_dynamic_action.attribute_01;
@@ -60,7 +60,7 @@ as
     l_position              p_dynamic_action.attribute_08%type := case when l_override_defaults then p_dynamic_action.attribute_08 else l_default_position end;
     l_icon_override         p_dynamic_action.attribute_10%type := case when l_override_defaults then p_dynamic_action.attribute_10 else null end;
     l_icon                  p_dynamic_action.attribute_10%type;
-    l_auto_dismiss_after    pls_integer                        := case when l_override_defaults then p_dynamic_action.attribute_11 else l_default_dismiss_after end;
+    l_auto_dismiss_after    pls_integer                        := case when l_override_defaults then apex_plugin_util.replace_substitutions(p_dynamic_action.attribute_11) else l_default_dismiss_after end;
     l_page_items            p_dynamic_action.attribute_12%type := p_dynamic_action.attribute_12;
     l_replace_errors_with   p_dynamic_action.attribute_13%type := nvl(p_dynamic_action.attribute_13, 'warning'); -- only used in case of Convert Native APEX Notifications
 
@@ -154,7 +154,7 @@ begin
 
         end if;
 
-        apex_json.write('iconClass'        , l_icon);
+        apex_json.write('iconClass'        , apex_plugin_util.replace_substitutions(l_icon));
         apex_json.write('replaceErrorsWith', l_replace_errors_with);
         apex_json.close_object;
 
